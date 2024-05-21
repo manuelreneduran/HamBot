@@ -1,5 +1,8 @@
 export const colors = {
-  background: {},
+  background: {
+    primary: "#13947C",
+    secondary: "#F2F2F2",
+  },
   button: {
     primary: {},
   },
@@ -13,5 +16,6 @@ export const colors = {
     primary: "#36454F",
     secondary: "#FFFFFF",
     tertiary: "#B1B1B1",
+    quaternary: "#797979",
   },
 };

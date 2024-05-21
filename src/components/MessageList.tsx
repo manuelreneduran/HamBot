@@ -1,7 +1,7 @@
 import React from "react";
 import { TMessage, TMessageList } from "../utils/types";
 import ChatBubble from "./ChatBubble";
-import { Divider, Typography } from "@mui/material";
+import { Divider, Stack, Typography } from "@mui/material";
 import { colors } from "../styles/colors";
 
 type MessageListProps = {
@@ -51,7 +51,11 @@ const MessageList = ({ messages }: MessageListProps) => {
     completeMessageNodes = [...completeMessageNodes, ...messageChunk];
   }
 
-  return <div>{completeMessageNodes}</div>;
+  return (
+    <Stack px={2} pb={4} spacing={3}>
+      {completeMessageNodes}
+    </Stack>
+  );
 };
 
 export default MessageList;

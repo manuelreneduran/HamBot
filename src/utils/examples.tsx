@@ -1,3 +1,4 @@
+import { formatTime } from "./date";
 import { TMessageList } from "./types";
 import { format, subDays } from "date-fns";
 
@@ -19,7 +20,7 @@ export const exampleMessages: TMessageList = {
       id: "1",
       content: "Hello, how can I help you today?",
       sender: "Agent",
-      createdAt: "2024-05-21T09:00:00Z",
+      createdAt: formatTime("2024-05-21T09:00:00Z"),
       read: true,
       reactions: {
         like: 5,
@@ -34,7 +35,7 @@ export const exampleMessages: TMessageList = {
       id: "2",
       content: "I need some assistance with my account.",
       sender: "User",
-      createdAt: "2024-05-21T09:01:00Z",
+      createdAt: formatTime("2024-05-21T09:01:00Z"),
       read: true,
       reactions: {
         like: 2,
@@ -49,7 +50,7 @@ export const exampleMessages: TMessageList = {
       id: "3",
       content: "Sure, I'd be happy to help. What seems to be the issue?",
       sender: "Agent",
-      createdAt: "2024-05-21T09:02:00Z",
+      createdAt: formatTime("2024-05-21T09:02:00Z"),
       read: false,
       reactions: {
         like: 3,
@@ -67,7 +68,7 @@ export const exampleMessages: TMessageList = {
       content:
         "I'm unable to log into my account despite entering the correct password.",
       sender: "User",
-      createdAt: "2024-05-21T09:03:00Z",
+      createdAt: formatTime("2024-05-21T09:03:00Z"),
       read: true,
       reactions: {
         like: 1,
@@ -83,7 +84,7 @@ export const exampleMessages: TMessageList = {
       content:
         "Let me check that for you. Can you confirm if you've tried resetting your password?",
       sender: "Agent",
-      createdAt: "2024-05-21T09:04:00Z",
+      createdAt: formatTime("2024-05-21T09:04:00Z"),
       read: false,
       reactions: {
         like: 2,
@@ -99,7 +100,7 @@ export const exampleMessages: TMessageList = {
       content:
         "Yes, I have tried resetting my password, but I still can't log in.",
       sender: "User",
-      createdAt: "2024-05-21T09:05:00Z",
+      createdAt: formatTime("2024-05-21T09:05:00Z"),
       read: true,
       reactions: {
         like: 1,
@@ -117,7 +118,7 @@ export const exampleMessages: TMessageList = {
       content:
         "I understand your frustration. Let's try a different approach. I'll send you a verification code to your registered email.",
       sender: "Agent",
-      createdAt: "2024-05-21T09:06:00Z",
+      createdAt: formatTime("2024-05-21T09:06:00Z"),
       read: false,
       reactions: {
         like: 4,
@@ -132,7 +133,7 @@ export const exampleMessages: TMessageList = {
       id: "8",
       content: "Okay, I received the verification code. What should I do next?",
       sender: "User",
-      createdAt: "2024-05-21T09:07:00Z",
+      createdAt: formatTime("2024-05-21T09:07:00Z"),
       read: true,
       reactions: {
         like: 2,
@@ -148,7 +149,7 @@ export const exampleMessages: TMessageList = {
       content:
         "Please enter the verification code on the login page, and you should be able to access your account.",
       sender: "Agent",
-      createdAt: "2024-05-21T09:08:00Z",
+      createdAt: formatTime("2024-05-21T09:08:00Z"),
       read: false,
       reactions: {
         like: 3,
