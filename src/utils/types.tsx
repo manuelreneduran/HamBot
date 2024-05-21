@@ -50,6 +50,10 @@ export type TResetPasswordFormInputs = {
   email: string;
 };
 
+export type TMessageList = {
+  [key: string]: TMessage[];
+};
+
 export type TMessage = {
   id: string;
   content: string;
@@ -57,14 +61,8 @@ export type TMessage = {
   createdAt: string;
   read: boolean;
   reactions: {
-    like: number;
-    love: number;
-    haha: number;
-    wow: number;
-    sad: number;
-    angry: number;
+    [key in TEmoji]: boolean;
   };
 };
-export type TMessageList = {
-  [key: string]: TMessage[];
-};
+
+export type TEmoji = "like" | "love" | "haha" | "wow" | "sad" | "angry";
