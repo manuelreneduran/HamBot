@@ -1,10 +1,10 @@
-import { Stack } from "@mui/material";
+import ChatBox from "../components/ChatBox";
 import CoreLayout from "../layouts/CoreLayout";
 
 const DashboardPage = () => {
   return (
-    <CoreLayout pageHeader="Dashboard">
-      <Stack>Hi</Stack>
+    <CoreLayout>
+      <ChatBox />
     </CoreLayout>
   );
 };
