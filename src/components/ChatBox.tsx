@@ -1,20 +1,17 @@
-import { Avatar, Badge, Stack, Typography } from "@mui/material";
+import { Avatar, Badge, Stack, TextField, Typography } from "@mui/material";
 import hamiltonAvatar from "../assets/hamilton_avatar.jpeg";
 import { colors } from "../styles/colors";
 import { exampleMessages } from "../utils/examples";
 import MessageList from "./MessageList";
 import { useEffect, useRef } from "react";
 
-type ChatBoxProps = {
-  children: React.ReactNode;
-};
-const ChatBox = ({ children }: ChatBoxProps) => {
+const ChatBox = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [children]); // Dependency on children to re-scroll when new content is added
+  }, []); // Dependency on children to re-scroll when new content is added
 
   return (
     <Stack
@@ -82,9 +79,22 @@ const ChatBox = ({ children }: ChatBoxProps) => {
         className="chatbox-footer"
         sx={{
           borderTop: `1px solid ${colors.border.primary}`,
-          padding: ".5rem",
+          padding: "1rem",
         }}
-      ></Stack>
+      >
+        <TextField
+          InputProps={{
+            style: {
+              borderRadius: "40px",
+              backgroundColor: colors.background.secondary,
+            },
+          }}
+          InputLabelProps={{ shrink: true }}
+          autoFocus
+          label="Type a message"
+          fullWidth
+        />
+      </Stack>
     </Stack>
   );
 };

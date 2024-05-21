@@ -17,7 +17,7 @@ const MessageList = ({ messages }: MessageListProps) => {
   }) => {
     // build and set the date header for this message chunk
     const dateHeader = (
-      <Divider sx={{ paddingX: "2rem" }}>
+      <Divider key={key} sx={{ paddingX: "2rem" }}>
         <Typography
           sx={{
             fontSize: "12px",
@@ -34,7 +34,7 @@ const MessageList = ({ messages }: MessageListProps) => {
 
     // iterate through messages and build the message nodes
     messages.forEach((message) => {
-      nodes.push(<ChatBubble message={message} />);
+      nodes.push(<ChatBubble key={message.id} message={message} />);
     });
 
     return nodes;
