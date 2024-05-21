@@ -1,61 +1,40 @@
-import MenuIcon from "@mui/icons-material/Menu";
-import { AppBar, IconButton, Typography } from "@mui/material";
+import {
+  AppBar,
+  Avatar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
 import Toolbar from "@mui/material/Toolbar";
 import * as React from "react";
-import { logout } from "../services/firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../services/firebase";
 
 const drawerWidth = 100;
+const settings = ["Logout"];
 
 type NavMenuProps = {
   children: React.ReactNode;
   pageHeader?: string;
 };
 export default function NavMenu({ children }: NavMenuProps) {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isClosing, setIsClosing] = React.useState(false);
-
-  const handleDrawerClose = () => {
-    setIsClosing(true);
-    setMobileOpen(false);
-  };
-
-  const handleDrawerTransitionEnd = () => {
-    setIsClosing(false);
-  };
-
-  const handleDrawerToggle = () => {
-    if (!isClosing) {
-      setMobileOpen(!mobileOpen);
-    }
-  };
-
-  const drawer = (
-    <div>
-      <Toolbar disableGutters>
-        <Box
-          sx={{
-            height: "200px",
-            width: "100px",
-            display: { xs: "none", sm: "flex" },
-            paddingX: "10px",
-          }}
-        ></Box>
-      </Toolbar>
-      <List>
-        <Divider />
-        <ListItem disablePadding onClick={logout}>
-          <ListItemButton>Logout</ListItemButton>
-        </ListItem>
-      </List>
-    </div>
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
   );
+
+  const [user] = useAuthState(auth);
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   return (
     <Box sx={{ display: "flex", height: "100%" }}>
@@ -67,63 +46,84 @@ export default function NavMenu({ children }: NavMenuProps) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar disableGutters sx={{ paddingX: 5 }}>
+        <Toolbar
+          disableGutters
+          sx={{
+            paddingLeft: "24px",
+            minHeight: "36px !important",
+            maxHeight: "36px !important",
+          }}
+        >
           <Box
             width="100%"
             display="flex"
             justifyContent="space-between"
             alignItems="center"
+            flexDirection="row"
           >
             <Box>
               <Typography>HamBot</Typography>
             </Box>
 
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
+            <Box
+              sx={{
+                flexGrow: 0,
+                marginRight: "24px",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
             >
-              <MenuIcon />
-            </IconButton>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    sx={{
+                      height: "24px",
+                      width: "24px",
+                    }}
+                    alt={user?.displayName || ""}
+                    src={user?.photoURL || ""}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
+      <Box component="nav" sx={{ flexShrink: { sm: 0 } }}></Box>
       <Box
-        component="nav"
-        sx={{ flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onTransitionEnd={handleDrawerTransitionEnd}
-          onClose={handleDrawerClose}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <div
+        component="main"
         style={{
-          padding: "4rem 2.25rem",
+          padding: "40px 24px",
           maxWidth: "100%",
           paddingBottom: "50px",
+          flex: 1,
         }}
       >
         {children}
-      </div>
+      </Box>
     </Box>
   );
 }
