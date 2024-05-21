@@ -1,17 +1,8 @@
 /* NAVIGATION TYPES */
-export enum EPages {
-  DASHBOARD = "Dashboard",
-  COVER_LETTER = "Cover Letters",
-  GENERATE_COVER_LETTER = "Generate Cover Letter",
-}
-
 export enum EPaths {
   DASHBOARD = "/dashboard",
   LOGIN = "/login",
   REGISTER = "/register",
-  GENERATE_COVER_LETTER = "/generate/cover-letter",
-  COVER_LETTER = "/cover-letter",
-  COVER_LETTER_DETAIL = "/cover-letter/:id",
   RESET_PASSWORD = "/reset-password",
   LOGOUT = "/logout",
 }
@@ -34,26 +25,6 @@ export enum ETiers {
 
 export type TQueryResponse<T> = {
   result: T;
-};
-
-export type TGetCoverLetterQueryResponse = {
-  text: string;
-  jobListingText: string;
-  length: string;
-  paragraphs: string;
-  userUid: string;
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-/* API Request Types */
-export type TGenerateCoverLetterRequest = {
-  resumeText?: string;
-  resumePDF?: any;
-  jobListingText: string;
-  length?: string;
-  paragraphs?: string;
 };
 
 /* Auth Types */
@@ -79,30 +50,21 @@ export type TResetPasswordFormInputs = {
   email: string;
 };
 
-/* Form Types */
-export type TCoverLetterFormInputs = {
-  resume: {
-    resumeText?: string;
-    resumePDF?: any;
-  };
-  jobListing: {
-    jobListingText: string;
-  };
-  parameters: {
-    length?: number;
-    paragraphs?: number;
+export type TMessage = {
+  id: string;
+  content: string;
+  sender: "User" | "Agent";
+  createdAt: string;
+  read: boolean;
+  reactions: {
+    like: number;
+    love: number;
+    haha: number;
+    wow: number;
+    sad: number;
+    angry: number;
   };
 };
-
-/* Detail Types */
-
-export type TCoverLetterDetail = {
-  text?: string;
-  jobListingText: string;
-  length?: string;
-  paragraphs?: string;
-  userUid: string;
-  id?: string;
-  createdAt: Date;
-  updatedAt: Date;
+export type TMessageList = {
+  [key: string]: TMessage[];
 };
