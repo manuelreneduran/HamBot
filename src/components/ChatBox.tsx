@@ -130,7 +130,7 @@ const ChatBox = () => {
         className="chatbox-body"
       >
         <MessageList messages={messages} />
-        <Stack height="100%" flex={1} mb={2}>
+        <Stack height="100%" alignItems="flex-start" flex={1} mb={2}>
           {isFetching && <TypingLoader />}
         </Stack>
       </Stack>

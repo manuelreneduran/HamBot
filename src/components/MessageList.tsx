@@ -52,7 +52,7 @@ const MessageList = ({ messages }: MessageListProps) => {
   }
 
   return (
-    <Stack flex={8} px={2} pb={4} spacing={3} justifyContent="space-between">
+    <Stack px={2} pb={4} spacing={3} justifyContent="space-between">
       {completeMessageNodes}
     </Stack>
   );
