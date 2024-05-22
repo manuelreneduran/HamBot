@@ -1,3 +1,4 @@
+import SendIcon from "@mui/icons-material/Send";
 import {
   Avatar,
   Badge,
@@ -7,29 +8,32 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import hamiltonAvatar from "../assets/hamilton_avatar.jpeg";
+import useAlert from "../hooks/useAlert";
+import {
+  useCreateEmbeddingMutation,
+  useCreateMessageMutation,
+  useGetMessagesQuery,
+} from "../services/api";
 import { colors } from "../styles/colors";
 import MessageList from "./MessageList";
-import { useEffect, useRef, useState } from "react";
-import {
-  useCreateChatHistoryMutation,
-  useGetChatHistoryQuery,
-} from "../services/api";
-import useAlert from "../hooks/useAlert";
-import SendIcon from "@mui/icons-material/Send";
 import TypingLoader from "./TypingLoader";
 
 const ChatBox = () => {
   const [userInput, setUserInput] = useState<string>("");
 
   const {
-    data: chatHistory,
+    data: messages,
     error,
-    isFetching: isFetchingGetChatHistory,
-  } = useGetChatHistoryQuery("1");
+    isFetching: isFetchingMessages,
+  } = useGetMessagesQuery("1");
 
-  const [createChatHistory, { isLoading: isLoadingCreateChatHistory }] =
-    useCreateChatHistoryMutation();
+  const [createEmbedding, { isLoading: isLoadingCreateEmbedding }] =
+    useCreateEmbeddingMutation();
+
+  const [createMessage, { isLoading: isLoadingCreateMessage }] =
+    useCreateMessageMutation();
 
   const { setAlert } = useAlert();
 
@@ -39,7 +43,7 @@ const ChatBox = () => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [chatHistory]); // Dependency on children to re-scroll when new content is added
+  }, [messages]); // Dependency on children to re-scroll when new content is added
 
   useEffect(() => {
     if (error) {
@@ -53,7 +57,8 @@ const ChatBox = () => {
       return;
     }
     try {
-      await createChatHistory({ userId: "1", userInput });
+      await createMessage({ userId: "1", text: userInput });
+      await createEmbedding({ userId: "1", userInput });
     } catch (error) {
       setAlert("Error sending message. Please try again later.", "error", true);
     } finally {
@@ -61,7 +66,8 @@ const ChatBox = () => {
     }
   };
 
-  const isFetching = isFetchingGetChatHistory || isLoadingCreateChatHistory;
+  const isFetching =
+    isFetchingMessages || isLoadingCreateEmbedding || isLoadingCreateMessage;
   return (
     <Stack
       sx={{
@@ -123,7 +129,7 @@ const ChatBox = () => {
         }}
         className="chatbox-body"
       >
-        <MessageList messages={chatHistory} />
+        <MessageList messages={messages} />
         <Stack height="100%" flex={1} mb={2}>
           {isFetching && <TypingLoader />}
         </Stack>

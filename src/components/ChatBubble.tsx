@@ -10,6 +10,7 @@ type ChatBubbleProps = {
 const ChatBubble = ({ message }: ChatBubbleProps) => {
   const isUser = message.sender === "User";
 
+  console.log(message);
   const emojiReactions: React.ReactNode[] = [];
 
   for (const key in message.reactions) {

@@ -27,9 +27,14 @@ export type TQueryResponse<T> = {
   result: T;
 };
 
-export type TCreateChatHistoryRequest = {
+export type TCreateEmbeddingRequest = {
   userId: string;
   userInput: string;
+};
+
+export type TCreateMessageRequest = {
+  userId: string;
+  text: string;
 };
 
 /* Auth Types */
