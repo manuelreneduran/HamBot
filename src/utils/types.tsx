@@ -27,6 +27,11 @@ export type TQueryResponse<T> = {
   result: T;
 };
 
+export type TCreateChatHistoryRequest = {
+  userId: string;
+  userInput: string;
+};
+
 /* Auth Types */
 
 export type TUser = {

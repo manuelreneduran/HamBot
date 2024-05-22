@@ -5,7 +5,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { colors } from "../styles/colors";
 
 type MessageListProps = {
-  messages: TMessageList;
+  messages?: TMessageList;
 };
 const MessageList = ({ messages }: MessageListProps) => {
   const buildMessagesChunk = ({
@@ -52,7 +52,7 @@ const MessageList = ({ messages }: MessageListProps) => {
   }
 
   return (
-    <Stack px={2} pb={4} spacing={3}>
+    <Stack flex={8} px={2} pb={4} spacing={3} justifyContent="space-between">
       {completeMessageNodes}
     </Stack>
   );
