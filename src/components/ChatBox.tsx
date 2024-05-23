@@ -66,6 +66,10 @@ const ChatBox = () => {
     }
   };
 
+  const handleAddReaction = (type: string) => {
+    console.log(type);
+  };
+
   const isFetching =
     isFetchingMessages || isLoadingCreateEmbedding || isLoadingCreateMessage;
   return (
@@ -129,7 +133,7 @@ const ChatBox = () => {
         }}
         className="chatbox-body"
       >
-        <MessageList messages={messages} />
+        <MessageList handleEmojiClick={handleAddReaction} messages={messages} />
         <Stack height="100%" alignItems="flex-start" flex={1} mb={2}>
           {isFetching && <TypingLoader />}
         </Stack>

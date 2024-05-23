@@ -24,7 +24,7 @@ const Emoji = ({ type }: { type: string }) => {
       emoji = "";
   }
 
-  return <span dangerouslySetInnerHTML={{ __html: emoji }} />;
+  return <>{emoji}</>;
 };
 
 export default Emoji;

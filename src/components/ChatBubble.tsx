@@ -1,16 +1,45 @@
-import { Stack } from "@mui/material";
-import React from "react";
+import { IconButton, Stack } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 import { colors } from "../styles/colors";
 import { TEmoji, TMessage } from "../utils/types";
 import Emoji from "./Emoji";
-
+import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
+import EmojiList from "./EmojiList";
 type ChatBubbleProps = {
   message: TMessage;
+  handleEmojiClick: (type: string) => void;
 };
-const ChatBubble = ({ message }: ChatBubbleProps) => {
+const ChatBubble = ({ message, handleEmojiClick }: ChatBubbleProps) => {
+  const [showEmojis, setShowEmojis] = useState(false);
+  const emojiContainerRef = useRef<HTMLDivElement>(null);
+
+  const toggleEmojis = () => {
+    setShowEmojis(!showEmojis);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      emojiContainerRef.current &&
+      !emojiContainerRef.current.contains(event.target as Node)
+    ) {
+      setShowEmojis(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showEmojis) {
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showEmojis]);
+
   const isUser = message.sender === "User";
 
-  console.log(message);
   const emojiReactions: React.ReactNode[] = [];
 
   for (const key in message.reactions) {
@@ -40,10 +69,10 @@ const ChatBubble = ({ message }: ChatBubbleProps) => {
       sx={{
         padding: "1rem",
         borderRadius: "10px",
-        backgroundColor: isUser
+        backgroundColor: !isUser
           ? colors.background.secondary
           : colors.background.primary,
-        color: isUser ? colors.text.primary : colors.text.secondary,
+        color: !isUser ? colors.text.primary : colors.text.secondary,
         alignSelf: isUser ? "flex-end" : "flex-start",
         maxWidth: "60%",
         wordBreak: "break-word",
@@ -60,9 +89,10 @@ const ChatBubble = ({ message }: ChatBubbleProps) => {
             {emojiReactions}
           </Stack>
         </Stack>
+
         <Stack
           sx={{
-            color: isUser ? colors.text.quaternary : colors.text.secondary,
+            color: !isUser ? colors.text.quaternary : colors.text.secondary,
           }}
           direction="row"
           justifyContent="flex-end"
@@ -70,6 +100,37 @@ const ChatBubble = ({ message }: ChatBubbleProps) => {
           {message.createdAt}
         </Stack>
       </Stack>
+      {!isUser && (
+        <Stack>
+          <Stack sx={{ position: "relative" }}>
+            <Stack
+              direction="row"
+              sx={{ position: "absolute", top: "2px", right: "-5px" }}
+              ref={emojiContainerRef}
+            >
+              <IconButton
+                size="small"
+                onClick={toggleEmojis}
+                sx={{
+                  backgroundColor: colors.background.secondary,
+                  "&.MuiButtonBase-root:hover": {
+                    backgroundColor: "lightgray",
+                  },
+                }}
+              >
+                <AddReactionOutlinedIcon
+                  sx={{
+                    height: "20px",
+                    width: "20px",
+                    color: colors.text.primary,
+                  }}
+                />
+              </IconButton>
+              {showEmojis && <EmojiList handleEmojiClick={handleEmojiClick} />}
+            </Stack>
+          </Stack>
+        </Stack>
+      )}
     </Stack>
   );
 };

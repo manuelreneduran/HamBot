@@ -102,3 +102,36 @@ a {
     transform: translateY(-10px);
   }
 }
+
+.emoji-list {
+  display: flex;
+  position: absolute;
+  right: 20px; /* Adjust based on your needs */
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation: slide-in 0.3s ease-in-out forwards;
+}
+
+.emoji-list span {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.emoji-list span:hover {
+  background-color: #f1f1f1;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

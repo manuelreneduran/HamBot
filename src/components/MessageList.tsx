@@ -6,8 +6,9 @@ import { colors } from "../styles/colors";
 
 type MessageListProps = {
   messages?: TMessageList;
+  handleEmojiClick: (type: string) => void;
 };
-const MessageList = ({ messages }: MessageListProps) => {
+const MessageList = ({ messages, handleEmojiClick }: MessageListProps) => {
   const buildMessagesChunk = ({
     key,
     messages,
@@ -34,7 +35,13 @@ const MessageList = ({ messages }: MessageListProps) => {
 
     // iterate through messages and build the message nodes
     messages.forEach((message) => {
-      nodes.push(<ChatBubble key={message.id} message={message} />);
+      nodes.push(
+        <ChatBubble
+          handleEmojiClick={handleEmojiClick}
+          key={message.id}
+          message={message}
+        />
+      );
     });
 
     return nodes;
