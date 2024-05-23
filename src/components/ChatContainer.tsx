@@ -23,12 +23,13 @@ import TypingLoader from "./TypingLoader";
 
 const ChatContainer = () => {
   const [userInput, setUserInput] = useState<string>("");
+  // we put the loading state in the component to avoid
+  // showing dot loader every polling interval
+  const [isFetchingMessages, setIsFetchingMessages] = useState<boolean>(false);
 
-  const {
-    data: messages,
-    error,
-    isFetching: isFetchingMessages,
-  } = useGetMessagesQuery("1");
+  const { data: messages, error } = useGetMessagesQuery("1", {
+    pollingInterval: 5000,
+  });
 
   const [createEmbedding, { isLoading: isLoadingCreateEmbedding }] =
     useCreateEmbeddingMutation();
@@ -62,6 +63,7 @@ const ChatContainer = () => {
     if (!userInput) {
       return;
     }
+    setIsFetchingMessages(true);
     try {
       await createMessage({ userId: "1", text: userInput });
       await createEmbedding({ userId: "1", userInput });
@@ -69,14 +71,18 @@ const ChatContainer = () => {
       setAlert("Error sending message. Please try again later.", "error", true);
     } finally {
       setUserInput("");
+      setIsFetchingMessages(false);
     }
   };
 
   const handleAddOrDeleteReaction = async (messageId: string, type: string) => {
+    setIsFetchingMessages(true);
     try {
       await createOrDeleteReaction({ messageId, type });
     } catch (error) {
       setAlert("Error adding reaction. Please try again later.", "error", true);
+    } finally {
+      setIsFetchingMessages(false);
     }
   };
 
