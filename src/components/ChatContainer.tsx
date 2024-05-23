@@ -28,19 +28,14 @@ const ChatContainer = () => {
   const [isFetchingMessages, setIsFetchingMessages] = useState<boolean>(false);
 
   const { data: messages, error } = useGetMessagesQuery("1", {
-    pollingInterval: 5000,
+    pollingInterval: 2500,
   });
 
-  const [createEmbedding, { isLoading: isLoadingCreateEmbedding }] =
-    useCreateEmbeddingMutation();
+  const [createEmbedding] = useCreateEmbeddingMutation();
 
-  const [createMessage, { isLoading: isLoadingCreateMessage }] =
-    useCreateMessageMutation();
+  const [createMessage] = useCreateMessageMutation();
 
-  const [
-    createOrDeleteReaction,
-    { isLoading: isLoadingCreateOrDeleteReaction },
-  ] = useCreateOrDeleteReactionMutation();
+  const [createOrDeleteReaction] = useCreateOrDeleteReactionMutation();
 
   const { setAlert } = useAlert();
 
@@ -63,15 +58,15 @@ const ChatContainer = () => {
     if (!userInput) {
       return;
     }
-    setIsFetchingMessages(true);
+
     try {
-      await createMessage({ userId: "1", text: userInput });
-      await createEmbedding({ userId: "1", userInput });
+      const response = await createMessage({ userId: "1", text: userInput });
+      setUserInput("");
+      if (response.data) {
+        await createEmbedding({ userId: "1", messageId: response.data });
+      }
     } catch (error) {
       setAlert("Error sending message. Please try again later.", "error", true);
-    } finally {
-      setUserInput("");
-      setIsFetchingMessages(false);
     }
   };
 
@@ -86,11 +81,7 @@ const ChatContainer = () => {
     }
   };
 
-  const isFetching =
-    isFetchingMessages ||
-    isLoadingCreateEmbedding ||
-    isLoadingCreateMessage ||
-    isLoadingCreateOrDeleteReaction;
+  const isFetching = isFetchingMessages;
   return (
     <Stack
       sx={{

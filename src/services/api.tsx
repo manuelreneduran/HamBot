@@ -21,19 +21,16 @@ export const api = createApi({
       TQueryResponse<string>,
       TCreateEmbeddingRequest
     >({
-      query: ({ userId, userInput }) => {
+      query: ({ userId, messageId }) => {
         return {
           url: "embeddings",
           method: "POST",
-          body: { userId, userInput },
+          body: { userId, messageId: messageId.toString() },
         };
       },
       invalidatesTags: ["Messages"],
     }),
-    createMessage: builder.mutation<
-      TQueryResponse<string>,
-      TCreateMessageRequest
-    >({
+    createMessage: builder.mutation<string, TCreateMessageRequest>({
       query: ({ userId, text }) => {
         return {
           url: "messages",
@@ -41,6 +38,8 @@ export const api = createApi({
           body: { userId, text },
         };
       },
+      transformResponse: (response: { messageId: string }) =>
+        response.messageId,
       invalidatesTags: ["Messages"],
     }),
     createOrDeleteReaction: builder.mutation<

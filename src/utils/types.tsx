@@ -29,7 +29,7 @@ export type TQueryResponse<T> = {
 
 export type TCreateEmbeddingRequest = {
   userId: string;
-  userInput: string;
+  messageId: string;
 };
 
 export type TCreateMessageRequest = {
