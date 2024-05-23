@@ -53,9 +53,7 @@ const ChatBubble = ({ message, handleEmojiClick }: ChatBubbleProps) => {
           fontSize: "12px",
           color: colors.text.tertiary,
           marginRight: "5px",
-          backgroundColor: isUser
-            ? colors.background.secondary
-            : colors.background.primary,
+          backgroundColor: "transparent",
           border: "1px solid white",
           borderRadius: "50%",
         }}
