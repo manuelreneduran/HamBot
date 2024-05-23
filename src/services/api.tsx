@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type {
   TCreateEmbeddingRequest,
   TCreateMessageRequest,
+  TCreateOrDeleteReactionRequest,
   TMessageList,
   TQueryResponse,
 } from "../utils/types";
@@ -42,6 +43,19 @@ export const api = createApi({
       },
       invalidatesTags: ["Messages"],
     }),
+    createOrDeleteReaction: builder.mutation<
+      TQueryResponse<string>,
+      TCreateOrDeleteReactionRequest
+    >({
+      query: ({ messageId, type }) => {
+        return {
+          url: "reactions",
+          method: "POST",
+          body: { messageId, type },
+        };
+      },
+      invalidatesTags: ["Messages"],
+    }),
     getMessages: builder.query<TMessageList, string>({
       query: (userId) => {
         return {
@@ -63,4 +77,5 @@ export const {
   useCreateEmbeddingMutation,
   useGetMessagesQuery,
   useCreateMessageMutation,
+  useCreateOrDeleteReactionMutation,
 } = api;

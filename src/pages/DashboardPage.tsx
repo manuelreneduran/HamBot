@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import ChatBox from "../components/ChatBox";
+import ChatContainer from "../components/ChatContainer";
 import CoreLayout from "../layouts/CoreLayout";
 
 const DashboardPage = () => {
@@ -12,7 +12,7 @@ const DashboardPage = () => {
           margin: "auto",
         }}
       >
-        <ChatBox />
+        <ChatContainer />
       </Stack>
     </CoreLayout>
   );

@@ -6,9 +6,12 @@ import { colors } from "../styles/colors";
 
 type MessageListProps = {
   messages?: TMessageList;
-  handleEmojiClick: (type: string) => void;
+  handleAddOrDeleteReaction: (messageId: string, type: string) => void;
 };
-const MessageList = ({ messages, handleEmojiClick }: MessageListProps) => {
+const MessageList = ({
+  messages,
+  handleAddOrDeleteReaction,
+}: MessageListProps) => {
   const buildMessagesChunk = ({
     key,
     messages,
@@ -37,7 +40,9 @@ const MessageList = ({ messages, handleEmojiClick }: MessageListProps) => {
     messages.forEach((message) => {
       nodes.push(
         <ChatBubble
-          handleEmojiClick={handleEmojiClick}
+          handleEmojiClick={(type: string) =>
+            handleAddOrDeleteReaction(message.id, type)
+          }
           key={message.id}
           message={message}
         />

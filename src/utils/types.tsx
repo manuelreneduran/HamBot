@@ -37,6 +37,10 @@ export type TCreateMessageRequest = {
   text: string;
 };
 
+export type TCreateOrDeleteReactionRequest = {
+  messageId: string;
+  type: string;
+};
 /* Auth Types */
 
 export type TUser = {

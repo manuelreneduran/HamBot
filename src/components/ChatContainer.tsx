@@ -14,13 +14,14 @@ import useAlert from "../hooks/useAlert";
 import {
   useCreateEmbeddingMutation,
   useCreateMessageMutation,
+  useCreateOrDeleteReactionMutation,
   useGetMessagesQuery,
 } from "../services/api";
 import { colors } from "../styles/colors";
 import MessageList from "./MessageList";
 import TypingLoader from "./TypingLoader";
 
-const ChatBox = () => {
+const ChatContainer = () => {
   const [userInput, setUserInput] = useState<string>("");
 
   const {
@@ -34,6 +35,11 @@ const ChatBox = () => {
 
   const [createMessage, { isLoading: isLoadingCreateMessage }] =
     useCreateMessageMutation();
+
+  const [
+    createOrDeleteReaction,
+    { isLoading: isLoadingCreateOrDeleteReaction },
+  ] = useCreateOrDeleteReactionMutation();
 
   const { setAlert } = useAlert();
 
@@ -66,33 +72,40 @@ const ChatBox = () => {
     }
   };
 
-  const handleAddReaction = (type: string) => {
-    console.log(type);
+  const handleAddOrDeleteReaction = async (messageId: string, type: string) => {
+    try {
+      await createOrDeleteReaction({ messageId, type });
+    } catch (error) {
+      setAlert("Error adding reaction. Please try again later.", "error", true);
+    }
   };
 
   const isFetching =
-    isFetchingMessages || isLoadingCreateEmbedding || isLoadingCreateMessage;
+    isFetchingMessages ||
+    isLoadingCreateEmbedding ||
+    isLoadingCreateMessage ||
+    isLoadingCreateOrDeleteReaction;
   return (
     <Stack
       sx={{
         border: `1px solid ${colors.border.primary}`,
         height: "100%",
       }}
-      className="chatbox-container"
+      className="chatcontainer-container"
     >
       <Stack
         direction="row"
         flex={1}
         justifyContent="space-between"
         alignItems="center"
-        className="chatbox-header"
+        className="chatcontainer-header"
         sx={{
           borderBottom: `1px solid ${colors.border.primary}`,
           padding: ".5rem",
         }}
       >
         <Stack
-          className="chatbox-header-title"
+          className="chatcontainer-header-title"
           display="flex"
           direction="row"
           alignItems="center"
@@ -131,15 +144,18 @@ const ChatBox = () => {
           overflowY: "auto",
           padding: ".5rem",
         }}
-        className="chatbox-body"
+        className="chatcontainer-body"
       >
-        <MessageList handleEmojiClick={handleAddReaction} messages={messages} />
+        <MessageList
+          handleAddOrDeleteReaction={handleAddOrDeleteReaction}
+          messages={messages}
+        />
         <Stack height="100%" alignItems="flex-start" flex={1} mb={2}>
           {isFetching && <TypingLoader />}
         </Stack>
       </Stack>
       <Stack
-        className="chatbox-footer"
+        className="chatcontainer-footer"
         sx={{
           borderTop: `1px solid ${colors.border.primary}`,
           padding: "1rem",
@@ -190,4 +206,4 @@ const ChatBox = () => {
   );
 };
 
-export default ChatBox;
+export default ChatContainer;

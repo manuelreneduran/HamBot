@@ -124,7 +124,14 @@ const ChatBubble = ({ message, handleEmojiClick }: ChatBubbleProps) => {
                   }}
                 />
               </IconButton>
-              {showEmojis && <EmojiList handleEmojiClick={handleEmojiClick} />}
+              {showEmojis && (
+                <EmojiList
+                  handleEmojiClick={(type: string) => {
+                    toggleEmojis();
+                    handleEmojiClick(type);
+                  }}
+                />
+              )}
             </Stack>
           </Stack>
         </Stack>
