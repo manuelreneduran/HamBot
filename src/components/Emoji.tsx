@@ -1,10 +1,4 @@
-const Emoji = ({
-  type,
-  useSparkle = false,
-}: {
-  type: string;
-  useSparkle?: boolean;
-}) => {
+const Emoji = ({ type }: { type: string }) => {
   let emoji = "";
 
   switch (type) {
@@ -33,15 +27,6 @@ const Emoji = ({
   return (
     <>
       <div> {emoji}</div>
-
-      {useSparkle && (
-        <>
-          <div className="sparkle">✨</div>
-          <div className="sparkle">✨</div>
-          <div className="sparkle">✨</div>
-          <div className="sparkle">✨</div>
-        </>
-      )}
     </>
   );
 };

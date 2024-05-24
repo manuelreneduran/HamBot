@@ -50,15 +50,17 @@ const ChatBubble = ({ message, handleEmojiClick }: ChatBubbleProps) => {
       <Stack
         key={key}
         sx={{
-          fontSize: "12px",
+          fontSize: "20px",
           color: colors.text.tertiary,
           marginRight: "5px",
           backgroundColor: "transparent",
-          border: "1px solid white",
+
           borderRadius: "50%",
         }}
       >
-        <Emoji type={key} />
+        <div key={key} className="emoji">
+          <Emoji type={key} />
+        </div>
       </Stack>
     );
   }
@@ -83,7 +85,7 @@ const ChatBubble = ({ message, handleEmojiClick }: ChatBubbleProps) => {
         justifyContent="space-between"
       >
         <Stack sx={{ position: "relative" }}>
-          <Stack direction="row" sx={{ position: "absolute", bottom: "-25px" }}>
+          <Stack direction="row" sx={{ position: "absolute", bottom: "-31px" }}>
             {emojiReactions}
           </Stack>
         </Stack>

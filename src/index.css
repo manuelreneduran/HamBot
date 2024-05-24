@@ -136,71 +136,20 @@ a {
   }
 }
 
-@keyframes popUp {
+@keyframes popIn {
   0% {
     transform: scale(0);
     opacity: 0;
   }
-  50% {
+  60% {
     transform: scale(1.2);
     opacity: 1;
   }
   100% {
     transform: scale(1);
-    opacity: 1;
   }
-}
-
-@keyframes sparkle {
-  0%,
-  100% {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.5);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.emoji-container {
-  position: relative;
-  display: inline-block;
-  margin: 50px;
 }
 
 .emoji {
-  font-size: 3rem;
-  animation: popUp 0.5s ease-out forwards;
-}
-
-.sparkle {
-  position: absolute;
-  font-size: 1.5rem;
-  color: gold;
-  animation: sparkle 1s ease-out forwards;
-}
-
-.sparkle:nth-child(1) {
-  top: -20px;
-  left: 10px;
-  animation-delay: 0.1s;
-}
-
-.sparkle:nth-child(2) {
-  top: -30px;
-  right: 0;
-  animation-delay: 0.2s;
-}
-
-.sparkle:nth-child(3) {
-  bottom: -20px;
-  left: 5px;
-  animation-delay: 0.3s;
-}
-
-.sparkle:nth-child(4) {
-  bottom: -10px;
-  right: 10px;
-  animation-delay: 0.4s;
+  animation: popIn 0.5s ease-out;
 }

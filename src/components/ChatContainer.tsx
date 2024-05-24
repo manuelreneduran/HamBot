@@ -19,16 +19,21 @@ import {
 } from "../services/api";
 import { colors } from "../styles/colors";
 import MessageList from "./MessageList";
-import TypingLoader from "./TypingLoader";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../services/firebase";
 
 const ChatContainer = () => {
   const [userInput, setUserInput] = useState<string>("");
+
   // we put the loading state in the component to avoid
   // showing dot loader every polling interval
   const [isFetchingMessages, setIsFetchingMessages] = useState<boolean>(false);
 
-  const { data: messages, error } = useGetMessagesQuery("1", {
+  const [user] = useAuthState(auth);
+
+  const { data: messages, error } = useGetMessagesQuery(user?.uid as string, {
     pollingInterval: 2500,
+    skip: !user?.uid,
   });
 
   const [createEmbedding] = useCreateEmbeddingMutation();
@@ -55,18 +60,24 @@ const ChatContainer = () => {
 
   const handleSubmitMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!userInput) {
+    setIsFetchingMessages(true);
+    if (!userInput || !user?.uid) {
       return;
     }
 
     try {
-      const response = await createMessage({ userId: "1", text: userInput });
+      const response = await createMessage({
+        userId: user.uid,
+        text: userInput,
+      });
       setUserInput("");
       if (response.data) {
-        await createEmbedding({ userId: "1", messageId: response.data });
+        await createEmbedding({ userId: user.uid, messageId: response.data });
       }
     } catch (error) {
       setAlert("Error sending message. Please try again later.", "error", true);
+    } finally {
+      setIsFetchingMessages(false);
     }
   };
 
@@ -81,7 +92,6 @@ const ChatContainer = () => {
     }
   };
 
-  const isFetching = isFetchingMessages;
   return (
     <Stack
       sx={{
@@ -147,9 +157,6 @@ const ChatContainer = () => {
           handleAddOrDeleteReaction={handleAddOrDeleteReaction}
           messages={messages}
         />
-        <Stack height="100%" alignItems="flex-start" flex={1} mb={2}>
-          {isFetching && <TypingLoader />}
-        </Stack>
       </Stack>
       <Stack
         className="chatcontainer-footer"
@@ -162,7 +169,7 @@ const ChatContainer = () => {
           <TextField
             onChange={(e) => setUserInput(e.target.value)}
             value={userInput}
-            disabled={isFetching}
+            disabled={isFetchingMessages}
             InputProps={{
               style: {
                 borderRadius: "40px",
@@ -179,11 +186,11 @@ const ChatContainer = () => {
                     aria-label="send message"
                     edge="end"
                     type="submit"
-                    disabled={isFetching}
+                    disabled={isFetchingMessages}
                   >
                     <SendIcon
                       sx={{
-                        color: !isFetching
+                        color: !isFetchingMessages
                           ? colors.background.primary
                           : "disabled",
                       }}
