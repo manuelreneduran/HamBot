@@ -6,7 +6,7 @@ body,
 
 a {
   text-decoration: none;
-  color: #ff5a00;
+  color: #13947c;
 }
 
 .jcp-spinner {
@@ -16,7 +16,7 @@ a {
 }
 
 .jcp-spinner > div {
-  background-color: #ff5a00;
+  background-color: #13947c;
   height: 100%;
   width: 6px;
   display: inline-block;

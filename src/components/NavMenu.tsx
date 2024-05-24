@@ -1,7 +1,5 @@
 import {
   AppBar,
-  Avatar,
-  IconButton,
   Menu,
   MenuItem,
   Stack,
@@ -9,13 +7,30 @@ import {
   Typography,
 } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import Toolbar from "@mui/material/Toolbar";
 import * as React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
+import {
+  Main,
+  StyledAvatar,
+  StyledIconButton,
+  StyledToolbar,
+  ToolbarContent,
+  UserMenuContainer,
+} from "./NavMenu.styles";
+import { useNavigate } from "react-router-dom";
+import { EMenuItemSettings, EPaths } from "../utils/types";
 
 const drawerWidth = 100;
-const settings = ["Logout"];
+const settings: {
+  name: EMenuItemSettings;
+  route: string;
+}[] = [
+  {
+    name: EMenuItemSettings.LOGOUT,
+    route: EPaths.LOGOUT,
+  },
+];
 
 type NavMenuProps = {
   children: React.ReactNode;
@@ -25,6 +40,8 @@ export default function NavMenu({ children }: NavMenuProps) {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const navigate = useNavigate();
 
   const [user] = useAuthState(auth);
 
@@ -46,45 +63,20 @@ export default function NavMenu({ children }: NavMenuProps) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar
-          disableGutters
-          sx={{
-            paddingLeft: "24px",
-            minHeight: "36px !important",
-            maxHeight: "36px !important",
-          }}
-        >
-          <Stack
-            width="100%"
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            flexDirection="row"
-          >
+        <StyledToolbar disableGutters>
+          <ToolbarContent>
             <Stack>
               <Typography>HamBot</Typography>
             </Stack>
 
-            <Stack
-              sx={{
-                flexGrow: 0,
-                marginRight: "24px",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
+            <UserMenuContainer>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    sx={{
-                      height: "24px",
-                      width: "24px",
-                    }}
+                <StyledIconButton onClick={handleOpenUserMenu}>
+                  <StyledAvatar
                     alt={user?.displayName || ""}
                     src={user?.photoURL || ""}
                   />
-                </IconButton>
+                </StyledIconButton>
               </Tooltip>
               <Menu
                 sx={{ mt: "45px" }}
@@ -103,27 +95,20 @@ export default function NavMenu({ children }: NavMenuProps) {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                  <MenuItem
+                    key={setting.name}
+                    onClick={() => navigate(setting.route)}
+                  >
+                    <Typography textAlign="center">{setting.name}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
-            </Stack>
-          </Stack>
-        </Toolbar>
+            </UserMenuContainer>
+          </ToolbarContent>
+        </StyledToolbar>
       </AppBar>
       <Stack component="nav" sx={{ flexShrink: { sm: 0 } }}></Stack>
-      <Stack
-        component="main"
-        style={{
-          padding: "40px 24px",
-          maxWidth: "100%",
-          paddingBottom: "50px",
-          flex: 1,
-        }}
-      >
-        {children}
-      </Stack>
+      <Main>{children}</Main>
     </Stack>
   );
 }

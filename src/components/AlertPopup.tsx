@@ -1,28 +1,20 @@
-import { Alert } from "@mui/material";
+import React from "react";
 import useAlert from "../hooks/useAlert";
 import { serializeError } from "../utils/errors";
+import { StyledAlert } from "./AlertPopup.styles";
 
-const AlertPopup = () => {
+const AlertPopup: React.FC = () => {
   const { text, type, useRawMessage } = useAlert();
 
   if (text && type) {
     const errorText = serializeError(text, useRawMessage);
     return (
-      <Alert
-        severity={type as "error" | "info" | "success" | "warning"}
-        sx={{
-          position: "absolute",
-          top: "1rem",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 10000,
-        }}
-      >
+      <StyledAlert severity={type as "error" | "info" | "success" | "warning"}>
         {errorText}
-      </Alert>
+      </StyledAlert>
     );
   } else {
-    return <></>;
+    return null;
   }
 };
 

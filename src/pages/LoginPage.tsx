@@ -4,18 +4,17 @@ import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/logo.svg";
 import Loader from "../components/Loader";
 import Typography from "../components/Typography";
 import useAlert from "../hooks/useAlert";
 import PublicLayout from "../layouts/PublicLayout";
 import { auth } from "../services/firebase";
-import { TLoginFormInputs } from "../utils/types";
-import { loginFormSchema } from "../utils/validation";
 import {
   logInWithEmailAndPassword,
   signInWithGoogle,
 } from "../services/firebase/auth";
+import { TLoginFormInputs } from "../utils/types";
+import { loginFormSchema } from "../utils/validation";
 
 const defaultLoginFormValues = {
   email: "",
@@ -78,14 +77,6 @@ const Login = () => {
             justifyContent: { xs: "center", sm: "space-between" },
           }}
         >
-          <img
-            style={{
-              height: "56px",
-              width: "auto",
-            }}
-            src={logo}
-            alt="JobCraftPro Logo"
-          />
           <Typography textAlign="center" variant="h4">
             Sign in
           </Typography>

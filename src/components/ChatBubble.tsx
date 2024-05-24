@@ -1,14 +1,24 @@
-import { IconButton, Stack } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { colors } from "../styles/colors";
+import {
+  ChatBubbleContainer,
+  EmojiReactionContainer,
+  EmojiListContainer,
+  EmojiRow,
+  MessageTimeContainer,
+  ReactionButtonContainer,
+  ReactionButtonRow,
+  ReactionIconButton,
+  ReactionIcon,
+} from "./ChatBubble.styles";
 import { TEmoji, TMessage } from "../utils/types";
 import Emoji from "./Emoji";
-import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
 import EmojiList from "./EmojiList";
+
 type ChatBubbleProps = {
   message: TMessage;
   handleEmojiClick: (type: string) => void;
 };
+
 const ChatBubble = ({ message, handleEmojiClick }: ChatBubbleProps) => {
   const [showEmojis, setShowEmojis] = useState(false);
   const emojiContainerRef = useRef<HTMLDivElement>(null);
@@ -47,98 +57,45 @@ const ChatBubble = ({ message, handleEmojiClick }: ChatBubbleProps) => {
       continue;
     }
     emojiReactions.push(
-      <Stack
-        key={key}
-        sx={{
-          fontSize: "20px",
-          color: colors.text.tertiary,
-          marginRight: "5px",
-          backgroundColor: "transparent",
-
-          borderRadius: "50%",
-        }}
-      >
+      <EmojiReactionContainer key={key}>
         <div key={key} className="emoji">
           <Emoji type={key} />
         </div>
-      </Stack>
+      </EmojiReactionContainer>
     );
   }
-  return (
-    <Stack
-      sx={{
-        padding: "1rem",
-        borderRadius: "10px",
-        backgroundColor: !isUser
-          ? colors.background.secondary
-          : colors.background.primary,
-        color: !isUser ? colors.text.primary : colors.text.secondary,
-        alignSelf: isUser ? "flex-end" : "flex-start",
-        maxWidth: "60%",
-        wordBreak: "break-word",
-      }}
-    >
-      {message.content}
-      <Stack
-        direction="row"
-        alignItems="flex-end"
-        justifyContent="space-between"
-      >
-        <Stack sx={{ position: "relative" }}>
-          <Stack direction="row" sx={{ position: "absolute", bottom: "-31px" }}>
-            {emojiReactions}
-          </Stack>
-        </Stack>
 
-        <Stack
-          sx={{
-            color: !isUser ? colors.text.quaternary : colors.text.secondary,
-          }}
-          direction="row"
-          justifyContent="flex-end"
-        >
-          {message.createdAt}
-        </Stack>
-      </Stack>
+  return (
+    <ChatBubbleContainer isUser={isUser}>
+      {message.content}
+      <EmojiListContainer>
+        <EmojiRow direction="row">{emojiReactions}</EmojiRow>
+      </EmojiListContainer>
+      <MessageTimeContainer
+        isUser={isUser}
+        direction="row"
+        justifyContent="flex-end"
+      >
+        {message.createdAt}
+      </MessageTimeContainer>
       {!isUser && (
-        <Stack>
-          <Stack sx={{ position: "relative" }}>
-            <Stack
-              direction="row"
-              sx={{ position: "absolute", top: "2px", right: "-5px" }}
-              ref={emojiContainerRef}
-            >
-              <IconButton
-                size="small"
-                onClick={toggleEmojis}
-                sx={{
-                  backgroundColor: colors.background.secondary,
-                  "&.MuiButtonBase-root:hover": {
-                    backgroundColor: "lightgray",
-                  },
+        <ReactionButtonContainer>
+          <ReactionButtonRow direction="row" ref={emojiContainerRef}>
+            <ReactionIconButton size="small" onClick={toggleEmojis}>
+              <ReactionIcon />
+            </ReactionIconButton>
+            {showEmojis && (
+              <EmojiList
+                handleEmojiClick={(type: string) => {
+                  toggleEmojis();
+                  handleEmojiClick(type);
                 }}
-              >
-                <AddReactionOutlinedIcon
-                  sx={{
-                    height: "20px",
-                    width: "20px",
-                    color: colors.text.primary,
-                  }}
-                />
-              </IconButton>
-              {showEmojis && (
-                <EmojiList
-                  handleEmojiClick={(type: string) => {
-                    toggleEmojis();
-                    handleEmojiClick(type);
-                  }}
-                />
-              )}
-            </Stack>
-          </Stack>
-        </Stack>
+              />
+            )}
+          </ReactionButtonRow>
+        </ReactionButtonContainer>
       )}
-    </Stack>
+    </ChatBubbleContainer>
   );
 };
 

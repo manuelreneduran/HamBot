@@ -21,7 +21,6 @@ export const ChatHeaderTitle = styled(Stack)({
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
-  spacing: 1,
 });
 
 export const AvatarBadge = styled(Avatar)({

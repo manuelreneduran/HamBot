@@ -119,7 +119,7 @@ const ChatContainer = () => {
           >
             <AvatarBadge alt="Alexander Hamilton" src={hamiltonAvatar} />
           </Badge>
-          <Stack>
+          <Stack ml={1}>
             <Typography>Alexander Hamilton</Typography>
             <OnlineStatus>Online</OnlineStatus>
           </Stack>

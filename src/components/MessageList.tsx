@@ -1,72 +1,49 @@
 import React from "react";
 import { TMessage, TMessageList } from "../utils/types";
 import ChatBubble from "./ChatBubble";
-import { Divider, Stack, Typography } from "@mui/material";
-import { colors } from "../styles/colors";
+import {
+  MessageListContainer,
+  DateHeader,
+  DateHeaderText,
+} from "./MessageList.styles";
 
 type MessageListProps = {
   messages?: TMessageList;
   handleAddOrDeleteReaction: (messageId: string, type: string) => void;
 };
-const MessageList = ({
+
+const MessageList: React.FC<MessageListProps> = ({
   messages,
   handleAddOrDeleteReaction,
-}: MessageListProps) => {
-  const buildMessagesChunk = ({
-    key,
-    messages,
-  }: {
-    key: string;
-    messages: TMessage[];
-  }) => {
-    // build and set the date header for this message chunk
+}) => {
+  const buildMessagesChunk = (key: string, messages: TMessage[]) => {
     const dateHeader = (
-      <Divider key={key} sx={{ paddingX: "2rem" }}>
-        <Typography
-          sx={{
-            fontSize: "12px",
-            color: colors.text.tertiary,
-            marginX: "1rem",
-          }}
-        >
-          {key}
-        </Typography>
-      </Divider>
+      <DateHeader key={key}>
+        <DateHeaderText>{key}</DateHeaderText>
+      </DateHeader>
     );
 
-    const nodes: React.ReactNode[] = [dateHeader];
+    const messageNodes = messages.map((message) => (
+      <ChatBubble
+        handleEmojiClick={(type: string) =>
+          handleAddOrDeleteReaction(message.id, type)
+        }
+        key={message.id}
+        message={message}
+      />
+    ));
 
-    // iterate through messages and build the message nodes
-    messages.forEach((message) => {
-      nodes.push(
-        <ChatBubble
-          handleEmojiClick={(type: string) =>
-            handleAddOrDeleteReaction(message.id, type)
-          }
-          key={message.id}
-          message={message}
-        />
-      );
-    });
-
-    return nodes;
+    return [dateHeader, ...messageNodes];
   };
 
-  let completeMessageNodes: React.ReactNode[] = [];
-
-  for (const key in messages) {
-    const messageChunk = buildMessagesChunk({
-      key,
-      messages: messages[key],
-    });
-
-    completeMessageNodes = [...completeMessageNodes, ...messageChunk];
-  }
+  const completeMessageNodes = Object.entries(messages ?? {}).flatMap(
+    ([key, messages]) => buildMessagesChunk(key, messages)
+  );
 
   return (
-    <Stack px={2} pb={4} spacing={3} justifyContent="space-between">
+    <MessageListContainer spacing={3} px={2} justifyContent="space-between">
       {completeMessageNodes}
-    </Stack>
+    </MessageListContainer>
   );
 };
 
