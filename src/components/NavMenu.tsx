@@ -4,10 +4,10 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Stack,
   Tooltip,
   Typography,
 } from "@mui/material";
-import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
 import * as React from "react";
@@ -37,7 +37,7 @@ export default function NavMenu({ children }: NavMenuProps) {
   };
 
   return (
-    <Box sx={{ display: "flex", height: "100%" }}>
+    <Stack sx={{ display: "flex", height: "100%" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -54,18 +54,18 @@ export default function NavMenu({ children }: NavMenuProps) {
             maxHeight: "36px !important",
           }}
         >
-          <Box
+          <Stack
             width="100%"
             display="flex"
             justifyContent="space-between"
             alignItems="center"
             flexDirection="row"
           >
-            <Box>
+            <Stack>
               <Typography>HamBot</Typography>
-            </Box>
+            </Stack>
 
-            <Box
+            <Stack
               sx={{
                 flexGrow: 0,
                 marginRight: "24px",
@@ -108,12 +108,12 @@ export default function NavMenu({ children }: NavMenuProps) {
                   </MenuItem>
                 ))}
               </Menu>
-            </Box>
-          </Box>
+            </Stack>
+          </Stack>
         </Toolbar>
       </AppBar>
-      <Box component="nav" sx={{ flexShrink: { sm: 0 } }}></Box>
-      <Box
+      <Stack component="nav" sx={{ flexShrink: { sm: 0 } }}></Stack>
+      <Stack
         component="main"
         style={{
           padding: "40px 24px",
@@ -123,7 +123,7 @@ export default function NavMenu({ children }: NavMenuProps) {
         }}
       >
         {children}
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 }

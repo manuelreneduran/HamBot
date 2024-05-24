@@ -1,6 +1,4 @@
-import SendIcon from "@mui/icons-material/Send";
 import {
-  Avatar,
   Badge,
   IconButton,
   InputAdornment,
@@ -9,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import hamiltonAvatar from "../assets/hamilton_avatar.jpeg";
 import useAlert from "../hooks/useAlert";
 import {
@@ -17,16 +16,23 @@ import {
   useCreateOrDeleteReactionMutation,
   useGetMessagesQuery,
 } from "../services/api";
-import { colors } from "../styles/colors";
-import MessageList from "./MessageList";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
+import { colors } from "../styles/colors";
+import {
+  AvatarBadge,
+  ChatBody,
+  ChatContainerWrapper,
+  ChatFooter,
+  ChatHeader,
+  ChatHeaderTitle,
+  OnlineStatus,
+  SendMessageIcon,
+} from "./ChatContainer.styles";
+import MessageList from "./MessageList";
 
 const ChatContainer = () => {
   const [userInput, setUserInput] = useState<string>("");
 
-  // we put the loading state in the component to avoid
-  // showing dot loader every polling interval
   const [isFetchingMessages, setIsFetchingMessages] = useState<boolean>(false);
 
   const [user] = useAuthState(auth);
@@ -50,7 +56,7 @@ const ChatContainer = () => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [messages]); // Dependency on children to re-scroll when new content is added
+  }, [messages]);
 
   useEffect(() => {
     if (error) {
@@ -93,31 +99,15 @@ const ChatContainer = () => {
   };
 
   return (
-    <Stack
-      sx={{
-        border: `1px solid ${colors.border.primary}`,
-        height: "100%",
-      }}
-      className="chatcontainer-container"
-    >
-      <Stack
+    <ChatContainerWrapper className="chatcontainer-container">
+      <ChatHeader
         direction="row"
         flex={1}
         justifyContent="space-between"
         alignItems="center"
         className="chatcontainer-header"
-        sx={{
-          borderBottom: `1px solid ${colors.border.primary}`,
-          padding: ".5rem",
-        }}
       >
-        <Stack
-          className="chatcontainer-header-title"
-          display="flex"
-          direction="row"
-          alignItems="center"
-          spacing={1}
-        >
+        <ChatHeaderTitle className="chatcontainer-header-title">
           <Badge
             color="success"
             variant="dot"
@@ -127,44 +117,25 @@ const ChatContainer = () => {
             }}
             overlap="circular"
           >
-            <Avatar
-              sx={{
-                height: "32px",
-                width: "32px",
-              }}
-              alt="Alexander Hamilton"
-              src={hamiltonAvatar}
-            />
+            <AvatarBadge alt="Alexander Hamilton" src={hamiltonAvatar} />
           </Badge>
           <Stack>
             <Typography>Alexander Hamilton</Typography>
-            <Typography fontSize="9px" sx={{ color: colors.badge.primary }}>
-              Online
-            </Typography>
+            <OnlineStatus>Online</OnlineStatus>
           </Stack>
-        </Stack>
-      </Stack>
-      <Stack
+        </ChatHeaderTitle>
+      </ChatHeader>
+      <ChatBody
         ref={containerRef}
         height={"100%"}
-        sx={{
-          overflowY: "auto",
-          padding: ".5rem",
-        }}
         className="chatcontainer-body"
       >
         <MessageList
           handleAddOrDeleteReaction={handleAddOrDeleteReaction}
           messages={messages}
         />
-      </Stack>
-      <Stack
-        className="chatcontainer-footer"
-        sx={{
-          borderTop: `1px solid ${colors.border.primary}`,
-          padding: "1rem",
-        }}
-      >
+      </ChatBody>
+      <ChatFooter className="chatcontainer-footer">
         <form onSubmit={handleSubmitMessage}>
           <TextField
             onChange={(e) => setUserInput(e.target.value)}
@@ -176,25 +147,14 @@ const ChatContainer = () => {
                 backgroundColor: colors.background.secondary,
               },
               endAdornment: (
-                <InputAdornment
-                  position="end"
-                  sx={{
-                    marginRight: "10px",
-                  }}
-                >
+                <InputAdornment position="end" sx={{ marginRight: "10px" }}>
                   <IconButton
                     aria-label="send message"
                     edge="end"
                     type="submit"
                     disabled={isFetchingMessages}
                   >
-                    <SendIcon
-                      sx={{
-                        color: !isFetchingMessages
-                          ? colors.background.primary
-                          : "disabled",
-                      }}
-                    />
+                    <SendMessageIcon isFetchingMessages={isFetchingMessages} />
                   </IconButton>
                 </InputAdornment>
               ),
@@ -205,8 +165,8 @@ const ChatContainer = () => {
             fullWidth
           />
         </form>
-      </Stack>
-    </Stack>
+      </ChatFooter>
+    </ChatContainerWrapper>
   );
 };
 
