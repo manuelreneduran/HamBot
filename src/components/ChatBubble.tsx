@@ -68,9 +68,7 @@ const ChatBubble = ({ message, handleEmojiClick }: ChatBubbleProps) => {
   return (
     <ChatBubbleContainer isUser={isUser}>
       {message.content}
-      <EmojiListContainer>
-        <EmojiRow direction="row">{emojiReactions}</EmojiRow>
-      </EmojiListContainer>
+
       <MessageTimeContainer
         isUser={isUser}
         direction="row"
@@ -78,6 +76,9 @@ const ChatBubble = ({ message, handleEmojiClick }: ChatBubbleProps) => {
       >
         {message.createdAt}
       </MessageTimeContainer>
+      <EmojiListContainer>
+        <EmojiRow direction="row">{emojiReactions}</EmojiRow>
+      </EmojiListContainer>
       {!isUser && (
         <ReactionButtonContainer>
           <ReactionButtonRow direction="row" ref={emojiContainerRef}>

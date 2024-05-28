@@ -16,7 +16,7 @@ const EmojiList = ({ handleEmojiClick }: EmojiListProps) => {
           aria-label={type}
           key={type}
         >
-          <Emoji type={type} useSparkle={false} />
+          <Emoji type={type} />
         </span>
       ))}
     </div>

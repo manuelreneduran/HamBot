@@ -1,6 +1,5 @@
 import Button, { ButtonProps } from "@mui/material/Button";
 import { alpha, styled } from "@mui/material/styles";
-import { colors } from "../styles/colors";
 
 const SecondaryButton = styled(Button)(({ theme }) => ({
   background: theme.palette.primary.main,
@@ -10,9 +9,6 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
   color: "white",
   height: 48,
   padding: "0 30px",
-  "&:hover": {
-    backgroundColor: colors.button.secondary.light,
-  },
 }));
 
 export default SecondaryButton as React.FC<ButtonProps>;
